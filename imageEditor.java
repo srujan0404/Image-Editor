@@ -203,11 +203,14 @@ public class imageEditor {
             // Compute the mirrored Y-coordinate.
             int mirroredY = height - y - 1;
 
-            // Get the color of the pixel from the mirrored row in the input image.
-            int pixel = inputImage.getRGB(0, mirroredY);
+            // Iterate through each column of pixels in the row.
+            for (int x = 0; x < width; x++) {
+                // Get the color of the pixel from the mirrored row in the input image.
+                int pixel = inputImage.getRGB(x, mirroredY);
 
-            // Set the pixel at the same X-coordinate in the output image.
-            mirroredImage.setRGB(0, y, pixel);
+                // Set the pixel at the same X and Y coordinates in the output image.
+                mirroredImage.setRGB(x, y, pixel);
+            }
         }
 
         // Return the vertically mirrored BufferedImage.
