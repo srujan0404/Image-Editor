@@ -228,7 +228,43 @@ public class imageEditor {
      * @param degrees    The angle in degrees by which to rotate the image.
      * @return A new BufferedImage with the specified rotation applied.
      */
-    public static BufferedImage rotate(BufferedImage inputImage, int degrees) {
+    public static BufferedImage rotateclockwise(BufferedImage inputImage, int degrees) {
+        // Create an AffineTransform to perform the rotation.
+        AffineTransform transform = new AffineTransform();
+
+        // Calculate the rotation center as the image's center.
+        double centerX = inputImage.getWidth() / 2.0;
+        double centerY = inputImage.getHeight() / 2.0;
+
+        // Set the rotation angle in radians.
+        double radians = Math.toRadians(degrees);
+
+        // Apply the rotation to the transform.
+        transform.rotate(radians, centerX, centerY);
+
+        // Create an AffineTransformOp with bilinear interpolation.
+        AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+
+        // Create a new BufferedImage with swapped width and height.
+        BufferedImage outputImage = new BufferedImage(inputImage.getHeight(), inputImage.getWidth(),
+                inputImage.getType());
+
+        // Apply the rotation to the input image and store the result in the output
+        // image.
+        op.filter(inputImage, outputImage);
+
+        // Return the rotated BufferedImage.
+        return outputImage;
+    }
+
+    /**
+     * This method rotates a given BufferedImage by a specified angle in degrees.
+     *
+     * @param inputImage The input BufferedImage to be rotated.
+     * @param degrees    The angle in degrees by which to rotate the image.
+     * @return A new BufferedImage with the specified rotation applied.
+     */
+    public static BufferedImage rotateanticlockwise(BufferedImage inputImage, int degrees) {
         // Create an AffineTransform to perform the rotation.
         AffineTransform transform = new AffineTransform();
 
@@ -371,11 +407,12 @@ public class imageEditor {
             System.out.println("1. Increase Brightness");
             System.out.println("2. Decrease Brightness");
             System.out.println("3. Grayscale");
-            System.out.println("4. Rotate");
-            System.out.println("5. Blur");
-            System.out.println("6. Mirror Horizontally");
-            System.out.println("7. Mirror Vertically");
-            System.out.println("8. Exit");
+            System.out.println("4. Rotate Clockwise");
+            System.out.println("5. Rotate Anticlockwise"); // New option for anticlockwise rotation
+            System.out.println("6. Blur");
+            System.out.println("7. Mirror Horizontally");
+            System.out.println("8. Mirror Vertically");
+            System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
             int choice = scanner.nextInt();
 
@@ -390,18 +427,21 @@ public class imageEditor {
                     image = convertToGray(image);
                     break;
                 case 4:
-                    image = rotate(image, 90);
+                    image = rotateclockwise(image, 90);
                     break;
                 case 5:
-                    image = blur(image, 5);
+                    image = rotateanticlockwise(image, -90); // Rotate Anticlockwise option
                     break;
                 case 6:
-                    image = mirrorHorizontally(image);
+                    image = blur(image, 5);
                     break;
                 case 7:
-                    image = mirrorVertically(image);
+                    image = mirrorHorizontally(image);
                     break;
                 case 8:
+                    image = mirrorVertically(image);
+                    break;
+                case 9:
                     System.out.println("Exiting...");
                     break;
                 default:
@@ -409,7 +449,7 @@ public class imageEditor {
             }
 
             // Save the modified image if the choice is valid
-            if (choice >= 1 && choice <= 7) {
+            if (choice >= 1 && choice <= 8) { // Adjust the range to include the new option
                 saveImage(image, outputImagePath);
             }
 
