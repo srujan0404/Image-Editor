@@ -185,9 +185,13 @@ public class imageEditor {
     }
 
     /**
-     * This method vertically mirrors a given BufferedImage.
+     * Mirrors a given BufferedImage vertically.
+     * This method creates a new BufferedImage with the same type as the input
+     * image,
+     * then copies the pixel colors from the input image to the output image with a
+     * vertical flip.
      *
-     * @param inputImage The input BufferedImage to be mirrored vertically.
+     * @param inputImage The input BufferedImage to be vertically mirrored.
      * @return A new BufferedImage with vertical mirroring applied.
      */
     public static BufferedImage mirrorVertically(BufferedImage inputImage) {
